@@ -111,12 +111,9 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 	public static class Filter implements IFilter {
 		@Override
 		public boolean select(final Object toTest) {
-			System.err.println("A: " + toTest);
 			return PropertySectionUtil.isBoCompatible(toTest, bo -> {
-				System.err.println("B: " + toTest + " : " + bo);
 				if (bo instanceof Feature) {
 					final Feature feature = (Feature) bo;
-					System.err.println("D: " + featureTypeToMetadataMap.containsKey(feature.eClass()));
 					return featureTypeToMetadataMap.containsKey(feature.eClass());
 				}
 
@@ -125,9 +122,6 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 		}
 	}
 
-	public SetFeatureClassifierPropertySection() {
-		System.err.println("C");
-	}
 	private static Map<EClass, FeatureClassifierMetadata> featureTypeToMetadataMap = new HashMap<EClass, FeatureClassifierMetadata>();
 
 	static {
@@ -354,14 +348,12 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		System.err.println("E");
 		super.setInput(part, selection);
 		selectedBos = Adapters.adapt(selection, BusinessObjectSelection.class);
 	}
 
 	@Override
 	public void refresh() {
-		System.err.println("F");
 		final List<Feature> features = selectedBos.boStream(Feature.class).collect(Collectors.toList());
 		curFeatureClassifier.setText(getFeatureClassifierLabel(features));
 

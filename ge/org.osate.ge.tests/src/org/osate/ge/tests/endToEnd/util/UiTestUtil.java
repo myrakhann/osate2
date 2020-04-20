@@ -246,35 +246,6 @@ public class UiTestUtil {
 	}
 
 	public static void clickViewTab(final String title) {
-		// TODO: Remove
-		System.err.println("LOOKING FOR TAB");
-		// setShouldFindInvisibleControls
-		bot.activeView().bot().getFinder().findControls(new BaseMatcher<Canvas>() {
-			@Override
-			public boolean matches(final Object item) {
-				System.err.println("ITEM: " + item);
-				return item instanceof Canvas && ((Canvas) item).toString().equals(title);
-			}
-
-			@Override
-			public void describeTo(final Description description) {
-			}
-		});
-		System.err.println("ALTERNATE");
-		bot.activeView().bot().getFinder().setShouldFindInvisibleControls(true);
-		bot.activeView().bot().getFinder().findControls(new BaseMatcher<Canvas>() {
-			@Override
-			public boolean matches(final Object item) {
-				System.err.println("ITEM: " + item);
-				return item instanceof Canvas && ((Canvas) item).toString().equals(title);
-			}
-
-			@Override
-			public void describeTo(final Description description) {
-			}
-		});
-		bot.activeView().bot().getFinder().setShouldFindInvisibleControls(false);
-
 		final SWTBotCanvas canvas = findViewCanvasByTitle(title);
 		canvas.click();
 	}
@@ -544,7 +515,8 @@ public class UiTestUtil {
 	}
 
 	private static SWTBotCanvas findViewCanvasByTitle(final String title) {
-		final Matcher<Canvas> matcher = new BaseMatcher<Canvas>() {
+		// Get the canvas again
+		final List<Canvas> canvas = bot.activeView().bot().getFinder().findControls(new BaseMatcher<Canvas>() {
 			@Override
 			public boolean matches(final Object item) {
 				return item instanceof Canvas && ((Canvas) item).toString().equals(title);
@@ -553,14 +525,8 @@ public class UiTestUtil {
 			@Override
 			public void describeTo(final Description description) {
 			}
-		};
+		});
 
-		waitUntil(() -> {
-			return bot.activeView().bot().getFinder().findControls(matcher).size() > 0;
-		}, "Unable to find canvas with title '" + title + "'");
-
-		// Get the canvas again
-		final List<Canvas> canvas = bot.activeView().bot().getFinder().findControls(matcher);
 		assertTrue("Cannot find view canvas '" + title + "'", canvas.size() > 0);
 		return new SWTBotCanvas(canvas.get(0));
 	}
