@@ -116,6 +116,7 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 				System.err.println("B: " + toTest + " : " + bo);
 				if (bo instanceof Feature) {
 					final Feature feature = (Feature) bo;
+					System.err.println("D: " + featureTypeToMetadataMap.containsKey(feature.eClass()));
 					return featureTypeToMetadataMap.containsKey(feature.eClass());
 				}
 
@@ -353,12 +354,14 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
+		System.err.println("E");
 		super.setInput(part, selection);
 		selectedBos = Adapters.adapt(selection, BusinessObjectSelection.class);
 	}
 
 	@Override
 	public void refresh() {
+		System.err.println("F");
 		final List<Feature> features = selectedBos.boStream(Feature.class).collect(Collectors.toList());
 		curFeatureClassifier.setText(getFeatureClassifierLabel(features));
 
