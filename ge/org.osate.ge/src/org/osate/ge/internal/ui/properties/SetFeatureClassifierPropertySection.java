@@ -111,7 +111,9 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 	public static class Filter implements IFilter {
 		@Override
 		public boolean select(final Object toTest) {
+			System.err.println("A: " + toTest);
 			return PropertySectionUtil.isBoCompatible(toTest, bo -> {
+				System.err.println("B: " + toTest);
 				if (bo instanceof Feature) {
 					final Feature feature = (Feature) bo;
 					return featureTypeToMetadataMap.containsKey(feature.eClass());
@@ -122,6 +124,9 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 		}
 	}
 
+	public SetFeatureClassifierPropertySection() {
+		System.err.println("C");
+	}
 	private static Map<EClass, FeatureClassifierMetadata> featureTypeToMetadataMap = new HashMap<EClass, FeatureClassifierMetadata>();
 
 	static {
