@@ -113,7 +113,7 @@ public class SetFeatureClassifierPropertySection extends AbstractPropertySection
 		public boolean select(final Object toTest) {
 			System.err.println("A: " + toTest);
 			return PropertySectionUtil.isBoCompatible(toTest, bo -> {
-				System.err.println("B: " + toTest);
+				System.err.println("B: " + toTest + " : " + bo);
 				if (bo instanceof Feature) {
 					final Feature feature = (Feature) bo;
 					return featureTypeToMetadataMap.containsKey(feature.eClass());
