@@ -43,6 +43,8 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Control;
@@ -67,6 +69,7 @@ import org.eclipse.swtbot.swt.finder.widgets.SWTBotTree;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotTreeItem;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -272,8 +275,7 @@ public class UiTestUtil {
 		assertEquals("Unexpected number of table rows", expectedValue, getNumberOfTableRows(tableIndex));
 	}
 
-	public static void assertTableItemText(final int tableIndex, final int rowIndex,
-			final String expectedValue) {
+	public static void assertTableItemText(final int tableIndex, final int rowIndex, final String expectedValue) {
 		assertEquals("Unexpected table item text", expectedValue, bot.table().getTableItem(rowIndex).getText());
 	}
 
@@ -663,6 +665,38 @@ public class UiTestUtil {
 		// Assert elements are selected
 		assertTrue("Elements '" + getDiagramElementReferences(elements) + "' were not selected",
 				editorBot.selectedEditParts().containsAll(partBots));
+
+		final Object[] editPartsToSelectArray = editPartsToSelect.toArray();
+
+		// TODO:; Debug remove
+		System.err.println("WAITING FOR SELECTION...");
+
+		waitUntil(() -> {
+			assertDiagramEditorActive(diagram);
+
+			// Get the current selection
+			final Object[] results = new Object[1];
+			Display.getDefault().syncExec(() -> {
+				final ISelection selection = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService()
+						.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection ss = (IStructuredSelection) selection;
+					results[0] = ss.toArray();
+				}
+			});
+
+			final Object[] selection = (Object[]) results[0];
+
+			// TODO; Remove debug
+			System.err.println("SELECTION: " + selection);
+			for (final Object v : selection) {
+				System.err.println("SEL: " + v);
+			}
+
+			return Arrays.equals(selection, editPartsToSelectArray);
+
+		}, "Elements '" + getDiagramElementReferences(elements) + "' were not selected");
+
 	}
 
 	private static String getDiagramElementReferences(final DiagramElementReference... elements) {
