@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtbot.eclipse.finder.finders.WorkbenchContentsFinder;
+import org.eclipse.swtbot.eclipse.finder.widgets.SWTBotView;
 import org.eclipse.swtbot.eclipse.gef.finder.SWTGefBot;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditPart;
 import org.eclipse.swtbot.eclipse.gef.finder.widgets.SWTBotGefEditor;
@@ -238,10 +239,14 @@ public class UiTestUtil {
 	}
 
 	public static void setViewFocus(final String title) {
-		bot.viewByTitle(title).setFocus();
+		// We manually find the view because bot.viewByTitle(title) appears to fail for some views.
+		final SWTBotView view = bot.views().stream().filter(v -> Objects.equals(v.getTitle(), title)).findAny().orElse(null);
+		assertNotNull("Unable to find view with title '" + title + "'", view);
+		view.setFocus();
 	}
 
 	public static void clickViewTab(final String title) {
+		// TODO: Remove
 		System.err.println("LOOKING FOR TAB");
 		bot.activeView().bot().getFinder().findControls(new BaseMatcher<Canvas>() {
 			@Override
@@ -662,14 +667,8 @@ public class UiTestUtil {
 		final List<SWTBotGefEditPart> partBots = findEditParts(editorBot, editPartsToSelect);
 		editorBot.select(partBots);
 
-		// Assert elements are selected
-		assertTrue("Elements '" + getDiagramElementReferences(elements) + "' were not selected",
-				editorBot.selectedEditParts().containsAll(partBots));
-
+		// for the selection service's selection to update
 		final Object[] editPartsToSelectArray = editPartsToSelect.toArray();
-
-		// TODO:; Debug remove
-		System.err.println("WAITING FOR SELECTION...");
 
 		waitUntil(() -> {
 			assertDiagramEditorActive(diagram);
@@ -687,15 +686,12 @@ public class UiTestUtil {
 
 			final Object[] selection = (Object[]) results[0];
 
-			// TODO; Remove debug
-			System.err.println("SELECTION: " + selection);
-			for (final Object v : selection) {
-				System.err.println("SEL: " + v);
-			}
-
 			return Arrays.equals(selection, editPartsToSelectArray);
 
 		}, "Elements '" + getDiagramElementReferences(elements) + "' were not selected");
+		// Assert elements are selected
+		assertTrue("Elements '" + getDiagramElementReferences(elements) + "' were not selected",
+				editorBot.selectedEditParts().containsAll(partBots));
 
 	}
 
