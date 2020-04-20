@@ -58,7 +58,7 @@ public class PrimaryEndToEndTest {
 	public void testGraphicalEditor() {
 		Display.getDefault().syncExec(() -> {
 			System.err.println("SIZE: " + PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().getSize());
-			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setSize(1024, 768);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell().setSize(1920, 1080);
 
 		});
 

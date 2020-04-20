@@ -248,6 +248,7 @@ public class UiTestUtil {
 	public static void clickViewTab(final String title) {
 		// TODO: Remove
 		System.err.println("LOOKING FOR TAB");
+		// setShouldFindInvisibleControls
 		bot.activeView().bot().getFinder().findControls(new BaseMatcher<Canvas>() {
 			@Override
 			public boolean matches(final Object item) {
@@ -259,6 +260,20 @@ public class UiTestUtil {
 			public void describeTo(final Description description) {
 			}
 		});
+		System.err.println("ALTERNATE");
+		bot.activeView().bot().getFinder().setShouldFindInvisibleControls(true);
+		bot.activeView().bot().getFinder().findControls(new BaseMatcher<Canvas>() {
+			@Override
+			public boolean matches(final Object item) {
+				System.err.println("ITEM: " + item);
+				return item instanceof Canvas && ((Canvas) item).toString().equals(title);
+			}
+
+			@Override
+			public void describeTo(final Description description) {
+			}
+		});
+		bot.activeView().bot().getFinder().setShouldFindInvisibleControls(false);
 
 		final SWTBotCanvas canvas = findViewCanvasByTitle(title);
 		canvas.click();
