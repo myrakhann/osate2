@@ -458,8 +458,6 @@ public class OsateGeTestCommands {
 	private static void setClassifierFromPropertiesView(final String classifier) {
 		assertViewIsVisible("Properties");
 		setViewFocus("Properties");
-		setViewFocus("Problems");
-		setViewFocus("Properties");
 
 		clickViewTab("AADL");
 		clickButton("Choose...");

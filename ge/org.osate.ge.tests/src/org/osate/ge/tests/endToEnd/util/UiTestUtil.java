@@ -529,7 +529,7 @@ public class UiTestUtil {
 	}
 
 	private static SWTBotCanvas findViewCanvasByTitle(final String title) {
-		final List<Canvas> canvas = bot.activeView().bot().getFinder().findControls(new BaseMatcher<Canvas>() {
+		final Matcher<Canvas> matcher = new BaseMatcher<Canvas>() {
 			@Override
 			public boolean matches(final Object item) {
 				return item instanceof Canvas && ((Canvas) item).toString().equals(title);
@@ -538,8 +538,14 @@ public class UiTestUtil {
 			@Override
 			public void describeTo(final Description description) {
 			}
-		});
+		};
 
+		waitUntil(() -> {
+			return bot.activeView().bot().getFinder().findControls(matcher).size() > 0;
+		}, "Unable to find canvas with title '" + title + "'");
+
+		// Get the canvas again
+		final List<Canvas> canvas = bot.activeView().bot().getFinder().findControls(matcher);
 		assertTrue("Cannot find view canvas '" + title + "'", canvas.size() > 0);
 		return new SWTBotCanvas(canvas.get(0));
 	}
