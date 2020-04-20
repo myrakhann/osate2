@@ -102,6 +102,15 @@ public class OsateGeTestCommands {
 		// Configure referenced projects
 		waitForWindowWithTitle("New");
 		checkItemsInSimpleTable(0, projectsToReference);
+
+		Thread.currentThread();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		clickButton("Finish");
 
 		// Verify results
@@ -453,7 +462,6 @@ public class OsateGeTestCommands {
 		openDiagramEditor(diagram);
 
 		assertViewIsVisible("Properties");
-		setViewFocus("Problems");
 		setViewFocus("Properties");
 
 		selectDiagramElements(diagram, elements);
