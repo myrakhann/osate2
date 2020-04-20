@@ -453,6 +453,7 @@ public class OsateGeTestCommands {
 		openDiagramEditor(diagram);
 
 		assertViewIsVisible("Properties");
+		setViewFocus("Problems");
 		setViewFocus("Properties");
 
 		selectDiagramElements(diagram, elements);
