@@ -47,7 +47,7 @@ public class AadlPerspectiveFactory implements IPerspectiveFactory {
 		bottom.addView("org.osate.xtext.aadl2.ui.propertyview.AadlPropertyView");
 		bottom.addView("org.osate.ui.classifier_info_view");
 		bottom.addView("org.osate.ui.projectdependencyvisualization");
-//		bottom.addView("org.osate.ui.modelunitdependencyvisualization");
+		bottom.addView("org.osate.ui.modelunitdependencyvisualization");
 
 		layout.addView(IPageLayout.ID_OUTLINE, IPageLayout.RIGHT, (float) 0.75, editorArea);
 

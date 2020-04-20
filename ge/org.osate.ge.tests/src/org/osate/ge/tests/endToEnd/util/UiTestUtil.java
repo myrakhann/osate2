@@ -99,7 +99,7 @@ public class UiTestUtil {
 	static {
 		bot = new SWTGefBot();
 		SWTBotPreferences.TIMEOUT = 10000;
-		SWTBotPreferences.PLAYBACK_DELAY = 10;
+		SWTBotPreferences.PLAYBACK_DELAY = 100;
 	}
 
 	/**
