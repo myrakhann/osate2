@@ -672,12 +672,24 @@ public class UiTestUtil {
 			});
 
 			final Object[] selection = (Object[]) results[0];
+			final boolean compare = Arrays.asList(selection).containsAll(Arrays.asList(editPartsToSelectArray));
+			final boolean compare2 = Arrays.equals(selection, editPartsToSelectArray);
+			if (!compare || !compare2) {
+				System.err.println("SELECTION");
+				for(final Object o : selection) {
+					System.err.println("O: " + o);
+				}
 
-			return Arrays.equals(selection, editPartsToSelectArray);
+				System.err.println("EP");
+				for(final Object o : editPartsToSelectArray) {
+					System.err.println("O: " + o);
+				}
+			}
+			return compare;
 
-		}, "Elements '" + getDiagramElementReferences(elements) + "' were not selected");
+		}, "Elements '" + getDiagramElementReferences(elements) + "' were not selected - A");
 		// Assert elements are selected
-		assertTrue("Elements '" + getDiagramElementReferences(elements) + "' were not selected",
+		assertTrue("Elements '" + getDiagramElementReferences(elements) + "' were not selected - B",
 				editorBot.selectedEditParts().containsAll(partBots));
 
 	}
