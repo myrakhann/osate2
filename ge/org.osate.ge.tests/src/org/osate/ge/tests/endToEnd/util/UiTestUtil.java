@@ -675,6 +675,7 @@ public class UiTestUtil {
 			final boolean compare = Arrays.asList(selection).containsAll(Arrays.asList(editPartsToSelectArray));
 			final boolean compare2 = Arrays.equals(selection, editPartsToSelectArray);
 			if (!compare || !compare2) {
+				System.err.println("STATUS: " + compare + " : " + compare2);
 				System.err.println("SELECTION");
 				for(final Object o : selection) {
 					System.err.println("O: " + o);
